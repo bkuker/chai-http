@@ -175,6 +175,19 @@ describe('request', function () {
         .then(done, done);
     });
 
+    it('agent can be used to set default headers', function (done){
+      var agent = request.agent('https://httpbin.org');
+      agent.auth("user", "passwd");
+
+      agent
+        .get('/basic-auth/user/passwd')
+        .then(function (res){
+          res.should.have.status(200);
+          agent.close();
+        })
+        .then(done, done);
+    });
+
     it('automatically closes the server down once done with it', function (done) {
       var server = require('http').createServer(function (req, res) {
         res.writeHeader(200, { 'content-type' : 'text/plain' });
@@ -240,6 +253,6 @@ describe('request', function () {
           res.body.cookies.biz.should.equal('baz');
         })
         .then(done, done);
-    });
+    });  
   });
 });
