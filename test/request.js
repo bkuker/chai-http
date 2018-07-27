@@ -253,6 +253,6 @@ describe('request', function () {
           res.body.cookies.biz.should.equal('baz');
         })
         .then(done, done);
-    });  
+    });
   });
 });
