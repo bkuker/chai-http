@@ -177,6 +177,20 @@ describe('request', function () {
 
     it('agent can be used to set default headers', function (done){
       var agent = request.agent('https://httpbin.org');
+      agent.set("Header-Name", "header_value");
+
+      agent
+        .get('/headers')
+        .then(function (res){
+          res.should.have.status(200);
+          res.body.headers.should.have.property('Header-Name').that.equals("header_value");
+          agent.close();
+        })
+        .then(done, done);
+    });
+
+    it('agent can be used to set default basic authentication', function (done){
+      var agent = request.agent('https://httpbin.org');
       agent.auth("user", "passwd");
 
       agent
