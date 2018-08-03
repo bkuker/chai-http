@@ -189,6 +189,22 @@ describe('request', function () {
         .then(done, done);
     });
 
+    it('agent can be used to set default baerer authentication', function (done){
+      var agent = request.agent('https://httpbin.org');
+      agent.set("Authorization", "Bearer test_bearer");
+
+      agent
+        .get('/bearer')
+        .then(function (res){
+          res.should.have.status(200);
+          res.should.be.json;
+          res.body.should.have.property('authenticated').that.equals(true);
+          res.body.should.have.property('token').that.equals("test_bearer");
+          agent.close();
+        })
+        .then(done, done);
+    });
+
     it('agent can be used to set default basic authentication', function (done){
       var agent = request.agent('https://httpbin.org');
       agent.auth("user", "passwd");
